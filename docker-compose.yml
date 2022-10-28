@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:14.5
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "1234567"
+      POSTGRES_DB: "romaneio_app"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ${HOME}/Docker-Compose/PostgreSQL:/var/lib/postgresql/data
+    networks:
+      - postgres-compose-network
+
+  pg-admin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "eduardo@teste.com"
+      PGADMIN_DEFAULT_PASSWORD: "1234567"
+    ports:
+      - "16543:80"
+    depends_on:
+      - db
+    networks:
+      - postgres-compose-network
+
+networks:
+  postgres-compose-network:
+    driver: bridge
