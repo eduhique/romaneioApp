@@ -54,6 +54,10 @@ public class User implements Serializable {
     @Size(min = 6)
     private String password;
 
+    @NotNull
+    @Column(nullable = false)
+    private boolean active;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserRole> roles;
 

@@ -21,8 +21,7 @@ import java.io.Serializable;
 @Table(name = "product_primitive_type")
 public class ProductPrimitiveType implements Serializable {
 
-
-    private static final long serialVersionUID = 8522692230371861531L;
+    private static final long serialVersionUID = -4107742846381223676L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_primitive_type_sequence")
@@ -40,5 +39,6 @@ public class ProductPrimitiveType implements Serializable {
     private String shortName;
 
     @NotNull
-    private boolean isFloat;
+    @Column(nullable = false)
+    private boolean Float;
 }

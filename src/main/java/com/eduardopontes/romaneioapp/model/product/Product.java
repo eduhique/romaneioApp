@@ -37,6 +37,10 @@ public class Product implements Serializable {
     private String name;
 
     @NotNull
+    @Column(nullable = false)
+    private boolean active;
+
+    @NotNull
     @OneToOne
     @JoinColumn(name = "product_type_id", nullable = false)
     private ProductType productType;

@@ -4,6 +4,8 @@ import com.eduardopontes.romaneioapp.model.product.Product;
 import com.eduardopontes.romaneioapp.model.product.ProductPrimitiveType;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,7 +28,7 @@ import java.io.Serializable;
 @Table(name = "order_item")
 public class OrderItem implements Serializable {
 
-    private static final long serialVersionUID = -4677476748478514011L;
+    private static final long serialVersionUID = 6400858393850054235L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_sequence")
@@ -51,4 +54,18 @@ public class OrderItem implements Serializable {
     @NotNull
     @JoinColumn(name = "primitive_type_id", nullable = false)
     private ProductPrimitiveType productPrimitiveType;
+
+    @CreationTimestamp
+    private LocalDateTime createdDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastUpdate;
+
+    @NotNull
+    @Column(nullable = false)
+    private boolean detached;
+
+    @NotNull
+    @Column(nullable = false)
+    private boolean conferred;
 }

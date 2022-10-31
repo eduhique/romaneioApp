@@ -23,21 +23,26 @@ create table client
 
 create table order_item
 (
-    id                int8   not null,
-    amount            float8 not null check (amount >= 0),
-    order_id          int8   not null,
-    product_id        int8   not null,
-    primitive_type_id int8   not null,
+    id                int8                  not null,
+    amount            float8                not null check (amount >= 0),
+    conferred         boolean default false not null,
+    created_date      timestamp,
+    detached          boolean default false not null,
+    last_update       timestamp,
+    order_id          int8                  not null,
+    product_id        int8                  not null,
+    primitive_type_id int8                  not null,
     primary key (id)
 );
 
 create table product
 (
-    id              int8         not null,
+    id              int8                 not null,
+    active          boolean default true not null,
     created_date    timestamp,
     last_update     timestamp,
-    name            varchar(150) not null,
-    product_type_id int8         not null,
+    name            varchar(150)         not null,
+    product_type_id int8                 not null,
     primary key (id)
 );
 
@@ -53,11 +58,11 @@ create table product_conversion_type
 
 create table product_primitive_type
 (
-    dtype      varchar(31)  not null,
-    id         int8         not null,
-    is_float   boolean      not null,
-    long_name  varchar(150) not null,
-    short_name varchar(5)   not null,
+    dtype      varchar(31)           not null,
+    id         int8                  not null,
+    float      boolean default false not null,
+    long_name  varchar(150)          not null,
+    short_name varchar(5)            not null,
     primary key (id)
 );
 
@@ -76,13 +81,14 @@ create table ro_order
 
 create table ro_user
 (
-    id           int8         not null,
+    id           int8                 not null,
+    active       boolean default true not null,
     created_date timestamp,
-    function     varchar(255) not null,
+    function     varchar(255)         not null,
     last_update  timestamp,
-    name         varchar(150) not null,
-    nickname     varchar(50)  not null,
-    password     varchar(255) not null,
+    name         varchar(150)         not null,
+    nickname     varchar(50)          not null,
+    password     varchar(255)         not null,
     primary key (id)
 );
 
@@ -95,11 +101,12 @@ create table role
 
 create table romaneio
 (
-    id           int8         not null,
+    id           int8                 not null,
+    active       boolean default true not null,
     comments     varchar(255),
     created_date timestamp,
     last_update  timestamp,
-    name         varchar(255) not null,
+    name         varchar(255)         not null,
     order_status varchar(255),
     status_date  timestamp,
     primary key (id)

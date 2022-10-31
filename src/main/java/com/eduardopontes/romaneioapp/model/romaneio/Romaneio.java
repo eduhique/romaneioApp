@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ import java.util.Set;
 @Setter
 public class Romaneio implements Serializable {
 
-    private static final long serialVersionUID = -4377408233573635731L;
+    private static final long serialVersionUID = -4329272826656812251L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "romaneio_sequence")
@@ -39,12 +40,6 @@ public class Romaneio implements Serializable {
     @Size(max = 255)
     private String name;
 
-    @CreationTimestamp
-    private LocalDateTime createdDate;
-
-    @UpdateTimestamp
-    private LocalDateTime lastUpdate;
-
     @Enumerated(EnumType.STRING)
     @NotEmpty
     private RomaneioStatus orderStatus;
@@ -53,6 +48,16 @@ public class Romaneio implements Serializable {
 
     @OneToMany(mappedBy = "romaneio", fetch = FetchType.LAZY)
     private Set<Order> orderItems;
+
+    @NotNull
+    @Column(nullable = false)
+    private boolean Active;
+
+    @CreationTimestamp
+    private LocalDateTime createdDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastUpdate;
 
     private String comments;
 
