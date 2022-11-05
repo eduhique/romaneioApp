@@ -42,16 +42,16 @@ public class Romaneio implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @NotEmpty
-    private RomaneioStatus orderStatus;
+    private RomaneioStatus status;
 
     private LocalDateTime statusDate;
 
     @OneToMany(mappedBy = "romaneio", fetch = FetchType.LAZY)
-    private Set<Order> orderItems;
+    private Set<Order> orders;
 
     @NotNull
     @Column(nullable = false)
-    private boolean Active;
+    private boolean active;
 
     @CreationTimestamp
     private LocalDateTime createdDate;

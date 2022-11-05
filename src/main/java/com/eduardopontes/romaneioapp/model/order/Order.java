@@ -66,7 +66,7 @@ public class Order implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @NotEmpty
-    private OrderStatus orderStatus;
+    private OrderStatus status;
 
     private LocalDateTime statusDate;
 }
