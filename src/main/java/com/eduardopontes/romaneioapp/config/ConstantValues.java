@@ -1,6 +1,6 @@
 package com.eduardopontes.romaneioapp.config;
 
-public class ConstantsValues {
+public class ConstantValues {
 
     public static final String DEFAULT_PAGE_NUMBER = "0";
 

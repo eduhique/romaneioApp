@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 public interface ClientMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "orders", ignore = true)
     Client toClient(ClientDto clientDto);
 
     @InheritInverseConfiguration

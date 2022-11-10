@@ -35,7 +35,7 @@ public class Client implements Serializable {
     @SequenceGenerator(name = "client_sequence", allocationSize = 1)
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = "O nome do Cliente não deve estar nulo ou vazio.")
     @Column(nullable = false)
     private String name;
 
@@ -47,7 +47,7 @@ public class Client implements Serializable {
     private Set<Order> orders;
 
     @Enumerated(EnumType.STRING)
-    @NotNull
+    @NotNull(message = "O tipo do cliente não pode ser nulo ou vazio.")
     private ClientType clientType;
 
     @CreationTimestamp

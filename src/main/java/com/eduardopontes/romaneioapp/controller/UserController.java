@@ -1,10 +1,10 @@
 package com.eduardopontes.romaneioapp.controller;
 
 import com.eduardopontes.romaneioapp.config.ConstantValues;
-import com.eduardopontes.romaneioapp.dto.ClientDto;
 import com.eduardopontes.romaneioapp.dto.PageDto;
-import com.eduardopontes.romaneioapp.model.client.Client;
-import com.eduardopontes.romaneioapp.service.ClientService;
+import com.eduardopontes.romaneioapp.dto.UserDto;
+import com.eduardopontes.romaneioapp.model.user.User;
+import com.eduardopontes.romaneioapp.service.UserService;
 import com.eduardopontes.romaneioapp.util.Util;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -24,35 +24,34 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/clients")
-public class ClientController {
+@RequestMapping(value = "/users")
+public class UserController {
 
-    private final ClientService clientService;
+    private final UserService userService;
 
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ClientDto save(@Valid @RequestBody ClientDto client) {
-        return clientService.save(client);
+    public UserDto save(@Valid @RequestBody UserDto userDto) {
+        return userService.save(userDto);
     }
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Long id, @Valid @RequestBody ClientDto client) {
-        clientService.update(id, client);
+    public void update(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
+        userService.update(id, userDto);
     }
 
     @GetMapping("{id}")
-    public ClientDto findById(@PathVariable("id") Long id) {
-        return clientService.findById(id);
+    public UserDto findById(@PathVariable("id") Long id) {
+        return userService.findById(id);
     }
 
     @GetMapping
-    public PageDto<ClientDto> findAll(Client client,
+    public PageDto<UserDto> findAll(User user,
             @RequestParam(defaultValue = ConstantValues.DEFAULT_PAGE_NUMBER, required = false) Integer page,
             @RequestParam(defaultValue = ConstantValues.DEFAULT_PAGE_SIZE, required = false) Integer size,
             @RequestParam(defaultValue = ConstantValues.DEFAULT_ORDER_BY, required = false) String order,
@@ -65,15 +64,14 @@ public class ClientController {
                 .withIgnoreCase()
                 .withStringMatcher(
                         ExampleMatcher.StringMatcher.CONTAINING);
-        Example<Client> example = Example.of(client, matcher);
+        Example<User> example = Example.of(user, matcher);
 
-        return clientService.findAll(example, page, size, new Sort.Order(directionEnum, order));
+        return userService.findAll(example, page, size, new Sort.Order(directionEnum, order));
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        clientService.delete(id);
+        userService.delete(id);
     }
-
 }
