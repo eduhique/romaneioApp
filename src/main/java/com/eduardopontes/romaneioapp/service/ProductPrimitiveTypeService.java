@@ -7,7 +7,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 
 public interface ProductPrimitiveTypeService {
-    ProductPrimitiveType saveOrGetByShortName(ProductPrimitiveType targetProductPrimitiveType);
+    ProductPrimitiveType findByShortName(String shortName);
 
     ProductPrimitiveTypeDto save(ProductPrimitiveTypeDto productPrimitiveTypeDto);
 
@@ -15,7 +15,7 @@ public interface ProductPrimitiveTypeService {
 
     ProductPrimitiveTypeDto findById(Long id);
 
-    PageDto<ProductPrimitiveTypeDto> findAll(Example<ProductPrimitiveType> example, Integer page, Integer size,
+    PageDto<ProductPrimitiveTypeDto> findAll(Example<ProductPrimitiveType> filter, Integer page, Integer size,
             Sort.Order order);
 
     void delete(Long id);

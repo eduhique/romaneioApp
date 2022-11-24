@@ -38,7 +38,8 @@ public class ProductConversionTypeServiceImpl implements ProductConversionTypeSe
         productConversionTypeSet.forEach(productConversionType -> {
             productConversionType.setProductType(productType);
             ProductPrimitiveType productPrimitiveType =
-                    primitiveTypeService.saveOrGetByShortName(productConversionType.getTargetProductPrimitiveType());
+                    primitiveTypeService.findByShortName(
+                            productConversionType.getTargetProductPrimitiveType().getShortName());
             productConversionType.setTargetProductPrimitiveType(productPrimitiveType);
         });
 

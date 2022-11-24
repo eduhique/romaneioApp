@@ -50,13 +50,13 @@ public class User implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotEmpty
-    @Column(nullable = false)
-    @Size(min = 6)
+    @Column(nullable = false, length = 64)
+    @Size(min = 6, max = 64, message = "A senha deve ter entre 6 e 64 caracteres.")
     private String password;
 
     @NotNull
     @Column(nullable = false)
-    private boolean active;
+    private Boolean active;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserRole> roles;

@@ -14,7 +14,9 @@ public interface ProductService {
 
     ProductDto findById(Long id);
 
-    PageDto<ProductDto> findAll(Example<Product> example, Integer page, Integer size, Sort.Order order);
+    Product findProductById(Long id);
+
+    PageDto<ProductDto> findAll(Example<Product> filter, Integer page, Integer size, Sort.Order order);
 
     void delete(Long id);
 

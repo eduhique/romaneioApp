@@ -23,7 +23,7 @@ public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_sequence")
     @SequenceGenerator(name = "role_sequence", allocationSize = 1)
-    private long id;
+    private Long id;
 
     @NotEmpty
     @Column(nullable = false, unique = true, length = 100)

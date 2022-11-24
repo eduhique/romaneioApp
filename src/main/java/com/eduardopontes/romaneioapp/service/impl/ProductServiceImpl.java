@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    public static final String PRODUTO_NAO_ENCONTRADO = "Produto não encontrado.";
+
     private final ProductRepository productRepository;
 
     private final ProductTypeService productTypeService;
@@ -55,14 +57,20 @@ public class ProductServiceImpl implements ProductService {
                     productRepository.save(product);
                     return product;
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, PRODUTO_NAO_ENCONTRADO));
     }
 
     @Override
     public ProductDto findById(Long id) {
         return productRepository.findById(id)
                 .map(productMapper::fromProduct)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, PRODUTO_NAO_ENCONTRADO));
+    }
+
+    @Override
+    public Product findProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, PRODUTO_NAO_ENCONTRADO));
     }
 
     @Override
@@ -89,6 +97,6 @@ public class ProductServiceImpl implements ProductService {
                     productRepository.delete(product);
                     return product;
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, PRODUTO_NAO_ENCONTRADO));
     }
 }

@@ -6,11 +6,13 @@ import com.eduardopontes.romaneioapp.model.user.User;
 import com.eduardopontes.romaneioapp.model.user.UserRole;
 import com.eduardopontes.romaneioapp.repository.UserRoleRepository;
 import com.eduardopontes.romaneioapp.service.UserRoleService;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
 public class UserRoleServiceImpl implements UserRoleService {
 
     private final UserRoleRepository userRoleRepository;
@@ -22,17 +24,15 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public Set<UserRole> save(User user) {
         Set<Role> roleSet = getRoles(user.getFunction());
-        return Set.copyOf(userRoleRepository.saveAll(roleSet
-                                                             .stream()
-                                                             .map(role -> {
-                                                                 UserRole userRole = new UserRole();
-                                                                 userRole.setUser(user);
-                                                                 userRole.setRole(role);
-                                                                 return userRole;
-                                                             })
-                                                             .collect(Collectors.toList())));
-
-
+        return Set.copyOf(
+                userRoleRepository
+                        .saveAll(roleSet.stream().map(role -> {
+                            UserRole userRole = new UserRole();
+                            userRole.setUser(user);
+                            userRole.setRole(role);
+                            return userRole;
+                        }).collect(Collectors.toList()))
+        );
     }
 
     @Override

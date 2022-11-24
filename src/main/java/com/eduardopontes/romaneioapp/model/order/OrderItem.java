@@ -48,7 +48,7 @@ public class OrderItem implements Serializable {
     @NotNull
     @Column(precision = 10, scale = 3)
     @Min(0)
-    private double amount;
+    private Double amount;
 
     @OneToOne
     @NotNull

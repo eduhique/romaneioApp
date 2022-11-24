@@ -39,12 +39,12 @@ public class ProductConversionType implements Serializable {
     @NotNull
     @Column(precision = 10, scale = 3)
     @Min(1)
-    private double fromPrimary;
+    private Double fromPrimary;
 
     @NotNull
     @Column(precision = 10, scale = 3)
     @Min(1)
-    private double toTarget;
+    private Double toTarget;
 
     @OneToOne
     @NotNull

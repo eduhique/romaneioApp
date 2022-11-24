@@ -23,7 +23,7 @@ public class RomaneioDto implements Serializable {
 
     private LocalDateTime statusDate;
 
-    private boolean active;
+    private Boolean active;
 
     private Set<Order> orders;
 

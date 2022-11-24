@@ -2,8 +2,10 @@ package com.eduardopontes.romaneioapp.service.impl;
 
 import com.eduardopontes.romaneioapp.dto.PageDto;
 import com.eduardopontes.romaneioapp.dto.UserDto;
+import com.eduardopontes.romaneioapp.dto.UserPasswordChangeRequest;
 import com.eduardopontes.romaneioapp.dto.mapper.UserMapper;
 import com.eduardopontes.romaneioapp.exception.BadRequestException;
+import com.eduardopontes.romaneioapp.model.user.Function;
 import com.eduardopontes.romaneioapp.model.user.User;
 import com.eduardopontes.romaneioapp.repository.UserRepository;
 import com.eduardopontes.romaneioapp.service.UserRoleService;
@@ -22,6 +24,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado.";
+
+    public static final String SENHA_DE_OUTRO_ADMINISTRADOR = "Não é possível alterar a senha de outro administrador";
 
     private final UserRepository userRepository;
 
@@ -53,7 +59,6 @@ public class UserServiceImpl implements UserService {
         userRepository.findById(id)
                 .map(user -> {
                     user.setName(userDto.getName());
-                    user.setPassword(userDto.getPassword());
                     user.setActive(userDto.isActive());
                     user.setFunction(userDto.getFunction());
                     userRepository.save(user);
@@ -61,14 +66,21 @@ public class UserServiceImpl implements UserService {
                     userRoleService.update(user);
                     return user;
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USUARIO_NAO_ENCONTRADO));
     }
 
     @Override
-    public UserDto findById(Long id) {
-        return userRepository.findById(id)
-                .map(userMapper::fromUser)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
+    @Transactional
+    public void changePassword(Long id, UserPasswordChangeRequest changePassword) {
+        userRepository.findById(id)
+                .map(user -> {
+                    if (user.getFunction() == Function.ADMINISTRADOR)
+                        throw new BadRequestException(SENHA_DE_OUTRO_ADMINISTRADOR);
+                    user.setPassword(changePassword.getNewPassword());
+                    userRepository.save(user);
+                    return user;
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USUARIO_NAO_ENCONTRADO));
     }
 
     @Override
@@ -88,6 +100,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto findById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::fromUser)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USUARIO_NAO_ENCONTRADO));
+    }
+
+    @Override
     public void delete(Long id) {
         userRepository.findById(id)
                 .map(user -> {
@@ -95,6 +114,6 @@ public class UserServiceImpl implements UserService {
 
                     return user;
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USUARIO_NAO_ENCONTRADO));
     }
 }

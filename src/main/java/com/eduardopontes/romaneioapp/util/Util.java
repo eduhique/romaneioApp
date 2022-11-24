@@ -7,6 +7,10 @@ import java.util.Arrays;
 
 public class Util {
 
+    private Util() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Sort.Direction getDirection(String direction) {
         if (direction == null || Arrays
                 .stream(Sort.Direction.values())

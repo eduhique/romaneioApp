@@ -12,12 +12,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "user_role")
-public class UserRole {
+public class UserRole implements Serializable {
+
+    private static final long serialVersionUID = -3380705379181467804L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_role_sequence")

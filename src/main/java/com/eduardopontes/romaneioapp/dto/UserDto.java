@@ -29,7 +29,7 @@ public class UserDto implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotEmpty
-    @Size(min = 6)
+    @Size(min = 6, max = 64, message = "A senha deve ter entre 6 e 64 caracteres.")
     private String password;
 
     @NotNull

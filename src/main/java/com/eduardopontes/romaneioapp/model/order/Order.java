@@ -54,7 +54,6 @@ public class Order implements Serializable {
     @JoinColumn(name = "users_id", nullable = false)
     private User user;
 
-
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private Set<OrderItem> orderItems;
 

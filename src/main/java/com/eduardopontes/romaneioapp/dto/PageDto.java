@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 public class PageDto<T> implements Serializable {
 
-    private static final long serialVersionUID = -5778661790905762985L;
+    private static final long serialVersionUID = -2409581114812634628L;
 
     private List<T> data;
 

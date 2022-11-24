@@ -51,7 +51,7 @@ public class Romaneio implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private boolean active;
+    private Boolean active;
 
     @CreationTimestamp
     private LocalDateTime createdDate;

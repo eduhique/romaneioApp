@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
 @Service
 public class ProductPrimitiveTypeServiceImpl implements ProductPrimitiveTypeService {
 
+    public static final String TIPO_PRIMITIVO_NAO_ENCONTRADO_NAO_ENCONTRADO =
+            "Tipo Primitivo não encontrado não encontrado.";
+
     private final ProductPrimitiveTypeRepository productPrimitiveTypeRepository;
 
     private final ProductPrimitiveTypeMapper productPrimitiveTypeMapper;
@@ -29,13 +32,6 @@ public class ProductPrimitiveTypeServiceImpl implements ProductPrimitiveTypeServ
             ProductPrimitiveTypeMapper productPrimitiveTypeMapper) {
         this.productPrimitiveTypeRepository = productPrimitiveTypeRepository;
         this.productPrimitiveTypeMapper = productPrimitiveTypeMapper;
-    }
-
-    @Override
-    @Transactional
-    public ProductPrimitiveType saveOrGetByShortName(ProductPrimitiveType targetProductPrimitiveType) {
-        return productPrimitiveTypeRepository.findByShortName(targetProductPrimitiveType.getShortName())
-                .orElse(productPrimitiveTypeRepository.save(targetProductPrimitiveType));
     }
 
     @Transactional
@@ -53,13 +49,21 @@ public class ProductPrimitiveTypeServiceImpl implements ProductPrimitiveTypeServ
                 .map(productPrimitiveType -> {
                     productPrimitiveType.setShortName(productPrimitiveTypeDto.getShortName());
                     productPrimitiveType.setLongName(productPrimitiveTypeDto.getLongName());
-                    productPrimitiveType.setFloat(productPrimitiveTypeDto.isFloat());
+                    productPrimitiveType.setFloatPoint(productPrimitiveTypeDto.isFloatPoint());
 
+                    productPrimitiveTypeRepository.save(productPrimitiveType);
                     return productPrimitiveType;
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                                               "Tipo Primitivo não encontrado não encontrado."));
+                                                               TIPO_PRIMITIVO_NAO_ENCONTRADO_NAO_ENCONTRADO));
 
+    }
+
+    @Override
+    public ProductPrimitiveType findByShortName(String shortName) {
+        return productPrimitiveTypeRepository.findByShortName(shortName)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                                               TIPO_PRIMITIVO_NAO_ENCONTRADO_NAO_ENCONTRADO));
     }
 
     @Override
@@ -67,7 +71,7 @@ public class ProductPrimitiveTypeServiceImpl implements ProductPrimitiveTypeServ
         return productPrimitiveTypeRepository.findById(id)
                 .map(productPrimitiveTypeMapper::fromProductPrimitiveType)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                                               "Tipo Primitivo não encontrado não encontrado."));
+                                                               TIPO_PRIMITIVO_NAO_ENCONTRADO_NAO_ENCONTRADO));
     }
 
     @Override
@@ -96,6 +100,6 @@ public class ProductPrimitiveTypeServiceImpl implements ProductPrimitiveTypeServ
                     return productPrimitiveType;
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                                               "Tipo Primitivo não encontrado não encontrado."));
+                                                               TIPO_PRIMITIVO_NAO_ENCONTRADO_NAO_ENCONTRADO));
     }
 }

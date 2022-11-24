@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class ClientServiceImpl implements ClientService {
 
+    public static final String CLIENTE_NAO_ENCONTRADO = "Cliente não encontrado.";
+
     private final ClientRepository clientRepository;
 
     private final ClientMapper clientMapper;
@@ -49,14 +51,14 @@ public class ClientServiceImpl implements ClientService {
                     clientRepository.save(client);
                     return client;
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, CLIENTE_NAO_ENCONTRADO));
     }
 
     @Override
     public ClientDto findById(Long id) {
         return clientRepository.findById(id)
                 .map(clientMapper::fromClient)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, CLIENTE_NAO_ENCONTRADO));
 
     }
 
@@ -84,6 +86,6 @@ public class ClientServiceImpl implements ClientService {
                     clientRepository.delete(client);
                     return client;
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, CLIENTE_NAO_ENCONTRADO));
     }
 }

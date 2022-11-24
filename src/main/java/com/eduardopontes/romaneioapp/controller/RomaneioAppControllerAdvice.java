@@ -2,9 +2,11 @@ package com.eduardopontes.romaneioapp.controller;
 
 import com.eduardopontes.romaneioapp.dto.ApiErrors;
 import com.eduardopontes.romaneioapp.exception.BadRequestException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,6 +34,14 @@ public class RomaneioAppControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handleBadRequestRuntimeException(RuntimeException ex) {
         return new ApiErrors(ex.getMessage());
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrors handleBadRequestMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        return new ApiErrors(ex.getAllErrors().stream()
+                                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                                     .collect(Collectors.toList()));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

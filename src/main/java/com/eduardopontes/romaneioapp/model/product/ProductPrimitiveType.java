@@ -40,5 +40,5 @@ public class ProductPrimitiveType implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private boolean Float;
+    private Boolean floatPoint;
 }

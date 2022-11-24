@@ -9,4 +9,8 @@ public class ConstantValues {
     public static final String DEFAULT_ORDER_BY = "id";
 
     public static final String DEFAULT_ORDER_DIRECTION = "ASC";
+
+    private ConstantValues() {
+        throw new IllegalStateException("Utility class");
+    }
 }
