@@ -4,6 +4,7 @@ import com.eduardopontes.romaneioapp.config.ConstantValues;
 import com.eduardopontes.romaneioapp.dto.PageDto;
 import com.eduardopontes.romaneioapp.dto.UserDto;
 import com.eduardopontes.romaneioapp.dto.UserPasswordChangeRequest;
+import com.eduardopontes.romaneioapp.dto.mapper.UserMapper;
 import com.eduardopontes.romaneioapp.model.user.User;
 import com.eduardopontes.romaneioapp.service.UserService;
 import com.eduardopontes.romaneioapp.util.Util;
@@ -31,8 +32,13 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+
+    private final UserMapper userMapper;
+
+    public UserController(UserService userService,
+            UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @PostMapping
@@ -68,7 +74,7 @@ public class UserController {
 
     @GetMapping("{id}")
     public UserDto findById(@PathVariable("id") Long id) {
-        return userService.findById(id);
+        return userMapper.fromUser(userService.findById(id));
     }
 
     @PatchMapping("{id}/change-password")

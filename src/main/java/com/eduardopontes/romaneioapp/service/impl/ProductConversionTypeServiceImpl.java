@@ -11,7 +11,6 @@ import com.eduardopontes.romaneioapp.service.ProductPrimitiveTypeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,7 +32,7 @@ public class ProductConversionTypeServiceImpl implements ProductConversionTypeSe
 
     @Transactional
     @Override
-    public List<ProductConversionType> saveAll(ProductType productType,
+    public void saveAll(ProductType productType,
             Set<ProductConversionType> productConversionTypeSet) {
         productConversionTypeSet.forEach(productConversionType -> {
             productConversionType.setProductType(productType);
@@ -43,7 +42,7 @@ public class ProductConversionTypeServiceImpl implements ProductConversionTypeSe
             productConversionType.setTargetProductPrimitiveType(productPrimitiveType);
         });
 
-        return productConversionTypeRepository.saveAll(productConversionTypeSet);
+        productConversionTypeRepository.saveAll(productConversionTypeSet);
     }
 
     @Transactional

@@ -20,8 +20,6 @@ public class OrderItemDto implements Serializable {
 
     private ProductPrimitiveTypeDto productPrimitiveType;
 
-    private LocalDateTime createdDate;
-
     private LocalDateTime lastUpdate;
 
     private boolean detached;

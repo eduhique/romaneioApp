@@ -130,9 +130,8 @@ public class RomaneioServiceImpl implements RomaneioService {
     }
 
     @Override
-    public RomaneioDto findById(Long id) {
+    public Romaneio findById(Long id) {
         return romaneioRepository.findById(id)
-                .map(romaneioMapper::fromRomaneio)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ROMANEIO_NAO_ENCONTRADO));
     }
 

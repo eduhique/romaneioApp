@@ -92,6 +92,7 @@ public class ProductPrimitiveTypeServiceImpl implements ProductPrimitiveTypeServ
                 .build();
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         productPrimitiveTypeRepository.findById(id)

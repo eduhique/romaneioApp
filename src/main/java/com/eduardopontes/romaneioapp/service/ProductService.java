@@ -12,9 +12,7 @@ public interface ProductService {
 
     void update(Long id, ProductDto productDto);
 
-    ProductDto findById(Long id);
-
-    Product findProductById(Long id);
+    Product findById(Long id);
 
     PageDto<ProductDto> findAll(Example<Product> filter, Integer page, Integer size, Sort.Order order);
 

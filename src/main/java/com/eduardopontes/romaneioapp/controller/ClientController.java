@@ -3,6 +3,7 @@ package com.eduardopontes.romaneioapp.controller;
 import com.eduardopontes.romaneioapp.config.ConstantValues;
 import com.eduardopontes.romaneioapp.dto.ClientDto;
 import com.eduardopontes.romaneioapp.dto.PageDto;
+import com.eduardopontes.romaneioapp.dto.mapper.ClientMapper;
 import com.eduardopontes.romaneioapp.model.client.Client;
 import com.eduardopontes.romaneioapp.service.ClientService;
 import com.eduardopontes.romaneioapp.util.Util;
@@ -29,8 +30,12 @@ public class ClientController {
 
     private final ClientService clientService;
 
-    public ClientController(ClientService clientService) {
+    private final ClientMapper clientMapper;
+
+    public ClientController(ClientService clientService,
+            ClientMapper clientMapper) {
         this.clientService = clientService;
+        this.clientMapper = clientMapper;
     }
 
 
@@ -48,7 +53,7 @@ public class ClientController {
 
     @GetMapping("{id}")
     public ClientDto findById(@PathVariable("id") Long id) {
-        return clientService.findById(id);
+        return clientMapper.fromClient(clientService.findById(id));
     }
 
     @GetMapping

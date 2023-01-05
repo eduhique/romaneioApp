@@ -50,8 +50,7 @@ public class User implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotEmpty
-    @Column(nullable = false, length = 64)
-    @Size(min = 6, max = 64, message = "A senha deve ter entre 6 e 64 caracteres.")
+    @Column(nullable = false)
     private String password;
 
     @NotNull

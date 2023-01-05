@@ -3,6 +3,7 @@ package com.eduardopontes.romaneioapp.controller;
 import com.eduardopontes.romaneioapp.config.ConstantValues;
 import com.eduardopontes.romaneioapp.dto.PageDto;
 import com.eduardopontes.romaneioapp.dto.ProductDto;
+import com.eduardopontes.romaneioapp.dto.mapper.ProductMapper;
 import com.eduardopontes.romaneioapp.model.product.Product;
 import com.eduardopontes.romaneioapp.service.ProductService;
 import com.eduardopontes.romaneioapp.util.Util;
@@ -29,8 +30,12 @@ public class ProductController {
 
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
+    private final ProductMapper productMapper;
+
+    public ProductController(ProductService productService,
+            ProductMapper productMapper) {
         this.productService = productService;
+        this.productMapper = productMapper;
     }
 
     @PostMapping
@@ -47,7 +52,7 @@ public class ProductController {
 
     @GetMapping("{id}")
     public ProductDto findById(@PathVariable("id") Long id) {
-        return productService.findById(id);
+        return productMapper.fromProduct(productService.findById(id));
     }
 
     @GetMapping

@@ -4,7 +4,6 @@ import com.eduardopontes.romaneioapp.model.product.Product;
 import com.eduardopontes.romaneioapp.model.product.ProductPrimitiveType;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
@@ -54,9 +53,6 @@ public class OrderItem implements Serializable {
     @NotNull
     @JoinColumn(name = "primitive_type_id", nullable = false)
     private ProductPrimitiveType productPrimitiveType;
-
-    @CreationTimestamp
-    private LocalDateTime createdDate;
 
     @UpdateTimestamp
     private LocalDateTime lastUpdate;

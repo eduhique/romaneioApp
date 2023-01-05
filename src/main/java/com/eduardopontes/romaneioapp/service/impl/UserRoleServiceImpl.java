@@ -7,6 +7,7 @@ import com.eduardopontes.romaneioapp.model.user.UserRole;
 import com.eduardopontes.romaneioapp.repository.UserRoleRepository;
 import com.eduardopontes.romaneioapp.service.UserRoleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,10 +22,11 @@ public class UserRoleServiceImpl implements UserRoleService {
         this.userRoleRepository = userRoleRepository;
     }
 
+    @Transactional
     @Override
-    public Set<UserRole> save(User user) {
+    public void save(User user) {
         Set<Role> roleSet = getRoles(user.getFunction());
-        return Set.copyOf(
+        Set.copyOf(
                 userRoleRepository
                         .saveAll(roleSet.stream().map(role -> {
                             UserRole userRole = new UserRole();
@@ -35,6 +37,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         );
     }
 
+    @Transactional
     @Override
     public void update(User user) {
         userRoleRepository.deleteAll(user.getRoles());

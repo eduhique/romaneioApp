@@ -10,7 +10,7 @@ public interface ClientService {
 
     ClientDto save(ClientDto clientDto);
 
-    ClientDto findById(Long id);
+    Client findById(Long id);
 
     PageDto<ClientDto> findAll(Example<Client> filter, Integer page, Integer size, Sort.Order order);
 

@@ -3,6 +3,7 @@ package com.eduardopontes.romaneioapp.controller;
 import com.eduardopontes.romaneioapp.config.ConstantValues;
 import com.eduardopontes.romaneioapp.dto.PageDto;
 import com.eduardopontes.romaneioapp.dto.RomaneioDto;
+import com.eduardopontes.romaneioapp.dto.mapper.RomaneioMapper;
 import com.eduardopontes.romaneioapp.model.romaneio.Romaneio;
 import com.eduardopontes.romaneioapp.model.romaneio.RomaneioStatus;
 import com.eduardopontes.romaneioapp.service.RomaneioService;
@@ -31,8 +32,12 @@ public class RomaneioController {
 
     private final RomaneioService romaneioService;
 
-    public RomaneioController(RomaneioService romaneioService) {
+    private final RomaneioMapper romaneioMapper;
+
+    public RomaneioController(RomaneioService romaneioService,
+            RomaneioMapper romaneioMapper) {
         this.romaneioService = romaneioService;
+        this.romaneioMapper = romaneioMapper;
     }
 
     @PostMapping
@@ -86,7 +91,7 @@ public class RomaneioController {
 
     @GetMapping("{id}")
     public RomaneioDto findById(@PathVariable("id") Long id) {
-        return romaneioService.findById(id);
+        return romaneioMapper.fromRomaneio(romaneioService.findById(id));
     }
 
     @DeleteMapping("{id}")

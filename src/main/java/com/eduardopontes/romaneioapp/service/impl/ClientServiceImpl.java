@@ -55,9 +55,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDto findById(Long id) {
+    public Client findById(Long id) {
         return clientRepository.findById(id)
-                .map(clientMapper::fromClient)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, CLIENTE_NAO_ENCONTRADO));
 
     }

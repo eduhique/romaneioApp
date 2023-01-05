@@ -1,10 +1,12 @@
 package com.eduardopontes.romaneioapp.service.impl;
 
+import com.eduardopontes.romaneioapp.dto.CredentialsDto;
 import com.eduardopontes.romaneioapp.dto.PageDto;
 import com.eduardopontes.romaneioapp.dto.UserDto;
 import com.eduardopontes.romaneioapp.dto.UserPasswordChangeRequest;
 import com.eduardopontes.romaneioapp.dto.mapper.UserMapper;
 import com.eduardopontes.romaneioapp.exception.BadRequestException;
+import com.eduardopontes.romaneioapp.exception.InvalidPasswordException;
 import com.eduardopontes.romaneioapp.model.user.Function;
 import com.eduardopontes.romaneioapp.model.user.User;
 import com.eduardopontes.romaneioapp.repository.UserRepository;
@@ -16,6 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,16 +34,23 @@ public class UserServiceImpl implements UserService {
 
     public static final String SENHA_DE_OUTRO_ADMINISTRADOR = "Não é possível alterar a senha de outro administrador";
 
+    public static final String A_SENHA_DEVE_TER_NO_MINIMO_6_CARACTERES = "A senha deve ter no mínimo 6 caracteres.";
+
     private final UserRepository userRepository;
 
     private final UserRoleService userRoleService;
 
+    private final PasswordEncoder passwordEncoder;
+
     private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserRoleService userRoleService, UserMapper userMapper) {
+
+    public UserServiceImpl(UserRepository userRepository, UserRoleService userRoleService, UserMapper userMapper,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userRoleService = userRoleService;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -48,6 +60,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException(String.format("NickName %s já cadastrado.", userDto.getNickname()));
 
         User user = userMapper.toUser(userDto);
+        user.setPassword(passwordEncode(user.getPassword()));
         userRepository.save(user);
         userRoleService.save(user);
         return userMapper.fromUser(user);
@@ -76,11 +89,22 @@ public class UserServiceImpl implements UserService {
                 .map(user -> {
                     if (user.getFunction() == Function.ADMINISTRADOR)
                         throw new BadRequestException(SENHA_DE_OUTRO_ADMINISTRADOR);
-                    user.setPassword(changePassword.getNewPassword());
+                    user.setPassword(passwordEncode(changePassword.getNewPassword()));
                     userRepository.save(user);
                     return user;
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USUARIO_NAO_ENCONTRADO));
+    }
+
+    @Override
+    public User auth(CredentialsDto credentialsDto) {
+        User user = findByNickname((credentialsDto.getLogin()));
+
+        if (!passwordEncoder.matches(credentialsDto.getPassword(), user.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+
+        return user;
     }
 
     @Override
@@ -100,12 +124,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findById(Long id) {
+    public User findById(Long id) {
         return userRepository.findById(id)
-                .map(userMapper::fromUser)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USUARIO_NAO_ENCONTRADO));
     }
 
+    @Override
+    public User findByNickname(String nickname) {
+        return userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USUARIO_NAO_ENCONTRADO));
+    }
+
+    @Transactional
     @Override
     public void delete(Long id) {
         userRepository.findById(id)
@@ -115,5 +145,25 @@ public class UserServiceImpl implements UserService {
                     return user;
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USUARIO_NAO_ENCONTRADO));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = findByNickname(username);
+
+        return org.springframework.security.core.userdetails.User
+                .builder()
+                .username(user.getNickname())
+                .password(user.getPassword())
+                .roles(new String[]{})
+                .build();
+    }
+
+    private String passwordEncode(String password) {
+        if (password.trim().length() < 6)
+            throw new BadRequestException(A_SENHA_DEVE_TER_NO_MINIMO_6_CARACTERES);
+
+        return passwordEncoder.encode(password);
+
     }
 }

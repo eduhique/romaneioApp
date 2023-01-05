@@ -19,7 +19,7 @@ public interface RomaneioService {
 
     void modifyStatus(Long id, RomaneioStatus romaneioStatus);
 
-    RomaneioDto findById(Long id);
+    Romaneio findById(Long id);
 
     PageDto<RomaneioDto> findAll(Example<Romaneio> filter, Integer page, Integer size, Sort.Order order);
 

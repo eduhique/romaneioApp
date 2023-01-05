@@ -32,7 +32,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 
     @Transactional
     @Override
-    public ProductType save(ProductType productType) {
+    public void save(ProductType productType) {
 
         ProductPrimitiveType primitiveType =
                 primitiveTypeService.findByShortName(productType.getProductPrimitiveType().getShortName());
@@ -44,7 +44,6 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         productTypeRepository.save(productType);
         conversionTypeService.saveAll(productType, productConversionTypeSet);
 
-        return productType;
     }
 
     @Transactional
