@@ -13,5 +13,5 @@ public class JwtDto {
 
     private String prefix;
 
-    private Long expiry;
+    private Integer expiry;
 }

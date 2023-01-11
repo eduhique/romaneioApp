@@ -7,8 +7,10 @@ import com.eduardopontes.romaneioapp.model.user.User;
 import com.eduardopontes.romaneioapp.security.jwt.JWTService;
 import com.eduardopontes.romaneioapp.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,5 +38,10 @@ public class AuthController {
         } catch (InvalidPasswordException | ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário ou Senha Inválidos.");
         }
+    }
+
+    @GetMapping("validation")
+    public boolean isValid(@RequestHeader("Authorization") String token) {
+        return jwtService.isValid(token);
     }
 }

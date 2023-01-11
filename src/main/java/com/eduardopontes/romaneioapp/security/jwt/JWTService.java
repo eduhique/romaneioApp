@@ -52,7 +52,7 @@ public class JWTService {
         return JwtDto.builder()
                 .token(token)
                 .prefix("Bearer")
-                .expiry(instant.toEpochMilli())
+                .expiry(expiry*60)
                 .build();
     }
 
