@@ -6,7 +6,8 @@ import com.eduardopontes.romaneioapp.dto.UserDto;
 import com.eduardopontes.romaneioapp.dto.UserPasswordChangeRequest;
 import com.eduardopontes.romaneioapp.dto.mapper.UserMapper;
 import com.eduardopontes.romaneioapp.exception.BadRequestException;
-import com.eduardopontes.romaneioapp.exception.InvalidPasswordException;
+import com.eduardopontes.romaneioapp.exception.InvalidAuthException;
+import com.eduardopontes.romaneioapp.exception.UserInactiveException;
 import com.eduardopontes.romaneioapp.model.user.Function;
 import com.eduardopontes.romaneioapp.model.user.User;
 import com.eduardopontes.romaneioapp.repository.UserRepository;
@@ -101,7 +102,11 @@ public class UserServiceImpl implements UserService {
         User user = findByNickname((credentialsDto.getLogin()));
 
         if (!passwordEncoder.matches(credentialsDto.getPassword(), user.getPassword())) {
-            throw new InvalidPasswordException();
+            throw new InvalidAuthException();
+        }
+
+        if(!user.getActive()){
+            throw new UserInactiveException();
         }
 
         return user;

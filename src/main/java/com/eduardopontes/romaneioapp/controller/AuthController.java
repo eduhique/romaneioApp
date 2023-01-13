@@ -2,7 +2,8 @@ package com.eduardopontes.romaneioapp.controller;
 
 import com.eduardopontes.romaneioapp.dto.CredentialsDto;
 import com.eduardopontes.romaneioapp.dto.JwtDto;
-import com.eduardopontes.romaneioapp.exception.InvalidPasswordException;
+import com.eduardopontes.romaneioapp.exception.InvalidAuthException;
+import com.eduardopontes.romaneioapp.exception.UserInactiveException;
 import com.eduardopontes.romaneioapp.model.user.User;
 import com.eduardopontes.romaneioapp.security.jwt.JWTService;
 import com.eduardopontes.romaneioapp.service.UserService;
@@ -35,13 +36,16 @@ public class AuthController {
             User user = userService.auth(credentialsDto);
             return jwtService.tokenGenerate(user);
 
-        } catch (InvalidPasswordException | ResponseStatusException e) {
+        } catch (InvalidAuthException | ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário ou Senha Inválidos.");
+        } catch (UserInactiveException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                                              "Este usuário esta inativo, contate um administrador.");
         }
     }
 
     @GetMapping("validation")
     public boolean isValid(@RequestHeader("Authorization") String token) {
-        return jwtService.isValid(token);
+        return jwtService.isValid(token.split(" ")[1]);
     }
 }
