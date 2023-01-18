@@ -57,9 +57,6 @@ public class User implements Serializable {
     @Column(nullable = false)
     private Boolean active;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private Set<UserRole> roles;
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Order> orders;
 

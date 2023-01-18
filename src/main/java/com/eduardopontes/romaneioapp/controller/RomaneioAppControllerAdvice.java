@@ -10,7 +10,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -48,11 +47,5 @@ public class RomaneioAppControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return new ApiErrors(ex.getMessage());
-    }
-
-    @ExceptionHandler(ResponseStatusException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiErrors handleResponseStatusException(ResponseStatusException ex) {
-        return new ApiErrors(ex.getReason());
     }
 }

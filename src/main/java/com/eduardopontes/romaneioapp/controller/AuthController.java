@@ -2,6 +2,8 @@ package com.eduardopontes.romaneioapp.controller;
 
 import com.eduardopontes.romaneioapp.dto.CredentialsDto;
 import com.eduardopontes.romaneioapp.dto.JwtDto;
+import com.eduardopontes.romaneioapp.dto.UserDto;
+import com.eduardopontes.romaneioapp.dto.mapper.UserMapper;
 import com.eduardopontes.romaneioapp.exception.InvalidAuthException;
 import com.eduardopontes.romaneioapp.exception.UserInactiveException;
 import com.eduardopontes.romaneioapp.model.user.User;
@@ -24,10 +26,13 @@ public class AuthController {
 
     private final JWTService jwtService;
 
+    private final UserMapper userMapper;
 
-    public AuthController(UserService userService, JWTService jwtService) {
+
+    public AuthController(UserService userService, JWTService jwtService, UserMapper userMapper) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.userMapper = userMapper;
     }
 
     @PostMapping
@@ -42,6 +47,16 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                                               "Este usuário esta inativo, contate um administrador.");
         }
+    }
+
+    @GetMapping("current-user")
+    public UserDto currentUser(@RequestHeader("Authorization") String token) {
+        return userMapper.fromUser(
+                userService.findByNickname(
+                        jwtService.getSubject(token.split(" ")[1])
+                )
+        );
+
     }
 
     @GetMapping("validation")

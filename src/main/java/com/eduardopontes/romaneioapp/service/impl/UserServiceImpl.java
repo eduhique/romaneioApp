@@ -11,7 +11,6 @@ import com.eduardopontes.romaneioapp.exception.UserInactiveException;
 import com.eduardopontes.romaneioapp.model.user.Function;
 import com.eduardopontes.romaneioapp.model.user.User;
 import com.eduardopontes.romaneioapp.repository.UserRepository;
-import com.eduardopontes.romaneioapp.service.UserRoleService;
 import com.eduardopontes.romaneioapp.service.UserService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -39,17 +38,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final UserRoleService userRoleService;
 
     private final PasswordEncoder passwordEncoder;
 
     private final UserMapper userMapper;
 
 
-    public UserServiceImpl(UserRepository userRepository, UserRoleService userRoleService, UserMapper userMapper,
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper,
             PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.userRoleService = userRoleService;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
     }
@@ -63,7 +60,6 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toUser(userDto);
         user.setPassword(passwordEncode(user.getPassword()));
         userRepository.save(user);
-        userRoleService.save(user);
         return userMapper.fromUser(user);
     }
 
@@ -77,7 +73,6 @@ public class UserServiceImpl implements UserService {
                     user.setFunction(userDto.getFunction());
                     userRepository.save(user);
 
-                    userRoleService.update(user);
                     return user;
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USUARIO_NAO_ENCONTRADO));
@@ -105,7 +100,7 @@ public class UserServiceImpl implements UserService {
             throw new InvalidAuthException();
         }
 
-        if(!user.getActive()){
+        if (!user.getActive()) {
             throw new UserInactiveException();
         }
 
@@ -160,7 +155,7 @@ public class UserServiceImpl implements UserService {
                 .builder()
                 .username(user.getNickname())
                 .password(user.getPassword())
-                .roles(new String[]{})
+                .roles(new String[]{user.getFunction().name()})
                 .build();
     }
 

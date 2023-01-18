@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/order/")
+@RequestMapping(value = "/orders/")
 public class OrderItemController {
     private final OrderItemService orderItemService;
 
@@ -30,36 +30,36 @@ public class OrderItemController {
         this.orderItemService = orderItemService;
     }
 
-    @PostMapping("{id}/item")
+    @PostMapping("{id}/items")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderItemDto save(@PathVariable Long id, @Valid @RequestBody OrderItemDto orderItemDto) {
         return orderItemService.save(id, orderItemDto);
     }
 
-    @PostMapping("{id}/item/all")
+    @PostMapping("{id}/items/all")
     @ResponseStatus(HttpStatus.CREATED)
     public List<OrderItemDto> save(@PathVariable Long id, @Valid @RequestBody List<OrderItemDto> orderItemDtos) {
         return orderItemService.saveAll(id, orderItemDtos);
     }
 
-    @PutMapping("item/{id}/detach")
+    @PutMapping("items/{id}/detach")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void detachItem(@PathVariable Long id, @Valid @RequestBody boolean value) {
         orderItemService.detachItem(id, value);
     }
 
-    @PutMapping("item/{id}/confer")
+    @PutMapping("items/{id}/confer")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void conferItem(@PathVariable Long id, @Valid @RequestBody boolean value) {
         orderItemService.conferItem(id, value);
     }
 
-    @GetMapping("item/{id}")
+    @GetMapping("items/{id}")
     public OrderItemDto findById(@PathVariable("id") Long id) {
         return orderItemService.findById(id);
     }
 
-    @GetMapping("{id}/item")
+    @GetMapping("{id}/items")
     public PageDto<OrderItemDto> findAll(@PathVariable("id") Long orderId,
             @RequestParam(defaultValue = ConstantValues.DEFAULT_PAGE_NUMBER, required = false) Integer page,
             @RequestParam(defaultValue = ConstantValues.DEFAULT_PAGE_SIZE, required = false) Integer size,
@@ -72,7 +72,7 @@ public class OrderItemController {
         return orderItemService.findAll(orderId, page, size, new Sort.Order(directionEnum, order));
     }
 
-    @DeleteMapping("item/{id}")
+    @DeleteMapping("items/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         orderItemService.delete(id);

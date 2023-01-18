@@ -4,7 +4,6 @@ import com.eduardopontes.romaneioapp.security.jwt.JWTAuthFilter;
 import com.eduardopontes.romaneioapp.security.jwt.JWTService;
 import com.eduardopontes.romaneioapp.service.UserService;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -51,8 +50,6 @@ public class SecurityConfiguration {
         return http.cors().and().csrf().disable()
                 .authorizeHttpRequests(
                         auth -> auth
-                                .antMatchers(HttpMethod.POST, "/users")
-                                .permitAll()
                                 .antMatchers("/auth/**")
                                 .permitAll()
                                 .anyRequest()

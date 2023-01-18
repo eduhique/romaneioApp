@@ -3,7 +3,6 @@ package com.eduardopontes.romaneioapp.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -16,11 +15,9 @@ public class ProductConversionTypeDto implements Serializable {
     private Long id;
 
     @NotNull
-    @Min(1)
     private double fromPrimary;
 
     @NotNull
-    @Min(1)
     private double toTarget;
 
     @NotNull

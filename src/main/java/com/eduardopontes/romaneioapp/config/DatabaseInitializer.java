@@ -27,7 +27,7 @@ public class DatabaseInitializer {
             user.setNickname(username);
             user.setPassword(password);
             user.setActive(true);
-            user.setFunction(Function.ADMINISTRADOR);
+            user.setFunction(Function.MASTER);
 
             try {
                 userService.save(user);

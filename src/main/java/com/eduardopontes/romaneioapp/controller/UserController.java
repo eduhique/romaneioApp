@@ -49,7 +49,7 @@ public class UserController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
+    public void update(@PathVariable("id") Long id, @Valid @RequestBody UserDto userDto) {
         userService.update(id, userDto);
     }
 
