@@ -48,6 +48,7 @@ public class ClientServiceImpl implements ClientService {
                     client.setName(clientDto.getName());
                     client.setDistrict(clientDto.getDistrict());
                     client.setClientType(clientDto.getClientType());
+                    client.setComments(clientDto.getComments());
                     clientRepository.save(client);
                     return client;
                 })
