@@ -41,7 +41,7 @@ public class Romaneio implements Serializable {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @NotEmpty
+    @NotNull
     private RomaneioStatus status;
 
     private LocalDateTime statusDate;

@@ -6,11 +6,12 @@ import com.eduardopontes.romaneioapp.dto.mapper.OrderMapper;
 import com.eduardopontes.romaneioapp.exception.BadRequestException;
 import com.eduardopontes.romaneioapp.model.order.Order;
 import com.eduardopontes.romaneioapp.model.order.OrderStatus;
+import com.eduardopontes.romaneioapp.model.romaneio.Romaneio;
 import com.eduardopontes.romaneioapp.repository.OrderRepository;
+import com.eduardopontes.romaneioapp.repository.RomaneioRepository;
 import com.eduardopontes.romaneioapp.service.ClientService;
 import com.eduardopontes.romaneioapp.service.OrderItemService;
 import com.eduardopontes.romaneioapp.service.OrderService;
-import com.eduardopontes.romaneioapp.service.RomaneioService;
 import com.eduardopontes.romaneioapp.service.UserService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.eduardopontes.romaneioapp.service.impl.RomaneioServiceImpl.ROMANEIO_NAO_ENCONTRADO;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -34,7 +37,6 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final RomaneioService romaneioService;
 
     private final ClientService clientService;
 
@@ -44,22 +46,25 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderMapper orderMapper;
 
-    public OrderServiceImpl(OrderRepository orderRepository, RomaneioService romaneioService,
+    private final RomaneioRepository romaneioRepository;
+
+    public OrderServiceImpl(OrderRepository orderRepository,
             ClientService clientService, UserService userService, OrderItemService orderItemService,
-            OrderMapper orderMapper) {
+            OrderMapper orderMapper,
+            RomaneioRepository romaneioRepository) {
         this.orderRepository = orderRepository;
-        this.romaneioService = romaneioService;
         this.clientService = clientService;
         this.userService = userService;
         this.orderItemService = orderItemService;
         this.orderMapper = orderMapper;
+        this.romaneioRepository = romaneioRepository;
     }
 
     @Transactional
     @Override
     public OrderDto save(OrderDto orderDto) {
         Order order = orderMapper.toOrder(orderDto);
-        order.setRomaneio(romaneioService.findById(orderDto.getRomaneio().getId()));
+        order.setRomaneio(getRomaneio(orderDto.getRomaneio().getId()));
         order.setClient(clientService.findById(orderDto.getClient().getId()));
         order.setUser(userService.findById(orderDto.getUser().getId()));
         orderRepository.save(order);
@@ -68,13 +73,18 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.fromOrder(order);
     }
 
+    private Romaneio getRomaneio(Long id) {
+        return romaneioRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ROMANEIO_NAO_ENCONTRADO));
+    }
+
     @Transactional
     @Override
     public void update(Long id, OrderDto orderDto) {
         orderRepository.findById(id)
                 .map(order -> {
                     if (!Objects.equals(order.getRomaneio().getId(), orderDto.getRomaneio().getId()))
-                        order.setRomaneio(romaneioService.findById(orderDto.getRomaneio().getId()));
+                        order.setRomaneio(getRomaneio(orderDto.getRomaneio().getId()));
                     if (!Objects.equals(order.getClient().getId(), orderDto.getClient().getId()))
                         order.setClient(clientService.findById(orderDto.getClient().getId()));
                     if (!Objects.equals(order.getUser().getId(), orderDto.getUser().getId()))

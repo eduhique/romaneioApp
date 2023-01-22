@@ -3,6 +3,7 @@ package com.eduardopontes.romaneioapp.controller;
 import com.eduardopontes.romaneioapp.config.ConstantValues;
 import com.eduardopontes.romaneioapp.dto.PageDto;
 import com.eduardopontes.romaneioapp.dto.RomaneioDto;
+import com.eduardopontes.romaneioapp.dto.RomaneioReportDTO;
 import com.eduardopontes.romaneioapp.dto.mapper.RomaneioMapper;
 import com.eduardopontes.romaneioapp.model.romaneio.Romaneio;
 import com.eduardopontes.romaneioapp.model.romaneio.RomaneioStatus;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/romaneio")
+@RequestMapping(value = "/romaneios")
 public class RomaneioController {
 
     private final RomaneioService romaneioService;
@@ -50,6 +51,12 @@ public class RomaneioController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable Long id, @Valid @RequestBody RomaneioDto romaneioDto) {
         romaneioService.update(id, romaneioDto);
+    }
+
+    @PatchMapping("{id}/active")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void setActive(@PathVariable Long id) {
+        romaneioService.setActive(id);
     }
 
     @PatchMapping("{id}/next-status")
@@ -92,6 +99,16 @@ public class RomaneioController {
     @GetMapping("{id}")
     public RomaneioDto findById(@PathVariable("id") Long id) {
         return romaneioMapper.fromRomaneio(romaneioService.findById(id));
+    }
+
+    @GetMapping("active")
+    public RomaneioDto findActive() {
+        return romaneioMapper.fromRomaneio(romaneioService.findActive());
+    }
+
+    @GetMapping("{id}/report")
+    public RomaneioReportDTO report(@PathVariable Long id) {
+        return romaneioService.report(id);
     }
 
     @DeleteMapping("{id}")
