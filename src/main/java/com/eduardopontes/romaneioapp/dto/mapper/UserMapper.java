@@ -11,7 +11,6 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "orders", ignore = true)
-    @Mapping(target = "roles", ignore = true)
     User toUser(UserDto userDto);
 
     @InheritInverseConfiguration

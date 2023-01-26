@@ -14,7 +14,6 @@ public interface UserResumeMapper {
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "orders", ignore = true)
-    @Mapping(target = "roles", ignore = true)
     User toUser(UserResumeDto userResumeDto);
 
     @InheritInverseConfiguration

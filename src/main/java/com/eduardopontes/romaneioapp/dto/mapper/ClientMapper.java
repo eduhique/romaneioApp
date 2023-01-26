@@ -6,7 +6,7 @@ import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {OrderMapper.class})
+@Mapper(componentModel = "spring")
 public interface ClientMapper {
 
     @Mapping(target = "id", ignore = true)
@@ -14,5 +14,6 @@ public interface ClientMapper {
     Client toClient(ClientDto clientDto);
 
     @InheritInverseConfiguration
+    @Mapping(target = "orders", ignore = true)
     ClientDto fromClient(Client client);
 }

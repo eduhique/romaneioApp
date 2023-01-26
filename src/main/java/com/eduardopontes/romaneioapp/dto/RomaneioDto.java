@@ -1,13 +1,11 @@
 package com.eduardopontes.romaneioapp.dto;
 
-import com.eduardopontes.romaneioapp.model.order.Order;
 import com.eduardopontes.romaneioapp.model.romaneio.RomaneioStatus;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -25,7 +23,6 @@ public class RomaneioDto implements Serializable {
 
     private Boolean active;
 
-    private Set<Order> orders;
 
     private LocalDateTime createdDate;
 

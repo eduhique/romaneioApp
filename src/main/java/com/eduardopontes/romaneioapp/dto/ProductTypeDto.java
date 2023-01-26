@@ -1,6 +1,5 @@
 package com.eduardopontes.romaneioapp.dto;
 
-import com.eduardopontes.romaneioapp.model.product.ProductPrimitiveType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +17,7 @@ public class ProductTypeDto implements Serializable {
     private Long id;
 
     @NotNull
-    private ProductPrimitiveType productPrimitiveType;
+    private ProductPrimitiveTypeDto productPrimitiveType;
 
     private Set<ProductConversionTypeDto> productConversionTypes;
 

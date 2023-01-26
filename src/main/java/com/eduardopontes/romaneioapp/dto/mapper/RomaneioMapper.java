@@ -6,7 +6,7 @@ import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {OrderMapper.class})
+@Mapper(componentModel = "spring")
 public interface RomaneioMapper {
 
     @Mapping(target = "id", ignore = true)
@@ -15,5 +15,6 @@ public interface RomaneioMapper {
     Romaneio toRomaneio(RomaneioDto romaneioDto);
 
     @InheritInverseConfiguration
+    @Mapping(target = "orders", ignore = true)
     RomaneioDto fromRomaneio(Romaneio romaneio);
 }

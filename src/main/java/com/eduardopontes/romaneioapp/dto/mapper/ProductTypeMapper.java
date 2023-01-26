@@ -6,7 +6,7 @@ import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {ProductConversionTypeMapper.class})
+@Mapper(componentModel = "spring", uses = {ProductPrimitiveTypeMapper.class, ProductConversionTypeMapper.class})
 public interface ProductTypeMapper {
 
     @Mapping(target = "id", ignore = true)

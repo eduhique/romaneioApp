@@ -4,7 +4,10 @@ import com.eduardopontes.romaneioapp.config.ConstantValues;
 import com.eduardopontes.romaneioapp.dto.OrderDto;
 import com.eduardopontes.romaneioapp.dto.PageDto;
 import com.eduardopontes.romaneioapp.dto.mapper.OrderMapper;
+import com.eduardopontes.romaneioapp.model.client.Client;
 import com.eduardopontes.romaneioapp.model.order.Order;
+import com.eduardopontes.romaneioapp.model.romaneio.Romaneio;
+import com.eduardopontes.romaneioapp.model.user.User;
 import com.eduardopontes.romaneioapp.service.OrderService;
 import com.eduardopontes.romaneioapp.util.Util;
 import org.springframework.data.domain.Example;
@@ -63,7 +66,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public PageDto<OrderDto> findAll(Order orderObject,
+    public PageDto<OrderDto> findAll(@RequestParam(required = false) String clientName,
+            @RequestParam(required = false) Long user, @RequestParam(required = false) Long romaneio,
             @RequestParam(defaultValue = ConstantValues.DEFAULT_PAGE_NUMBER, required = false) Integer page,
             @RequestParam(defaultValue = ConstantValues.DEFAULT_PAGE_SIZE, required = false) Integer size,
             @RequestParam(defaultValue = ConstantValues.DEFAULT_ORDER_BY, required = false) String order,
@@ -71,6 +75,24 @@ public class OrderController {
 
         Sort.Direction directionEnum = Util.getDirection(direction);
 
+        var orderObject = new Order();
+        if (clientName != null) {
+            var client = new Client();
+            client.setName(clientName);
+            orderObject.setClient(client);
+        }
+
+        if (user != null) {
+            var userObj = new User();
+            userObj.setId(user);
+            orderObject.setUser(userObj);
+        }
+
+        if (romaneio != null) {
+            var romaneioObj = new Romaneio();
+            romaneioObj.setId(romaneio);
+            orderObject.setRomaneio(romaneioObj);
+        }
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
                 .withIgnoreCase()

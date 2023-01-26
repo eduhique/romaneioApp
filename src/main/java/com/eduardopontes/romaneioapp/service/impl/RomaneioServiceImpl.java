@@ -213,7 +213,7 @@ public class RomaneioServiceImpl implements RomaneioService {
 
         Map<Long, List<ProductClientReportDto>> productMap = new HashMap<>();
 
-        while (!orders.isLast()) {
+        do {
             orders.getData().forEach(orderDto -> {
                 var productClientReportDtoStream =
                         orderDto.getOrderItems().stream().map(orderItemDto -> ProductClientReportDto.builder()
@@ -233,8 +233,7 @@ public class RomaneioServiceImpl implements RomaneioService {
             });
 
             orders = ordersPage(romaneio, ++orderPage);
-        }
-
+        } while (!orders.isLast());
         return new ArrayList<>(productMap.values());
     }
 

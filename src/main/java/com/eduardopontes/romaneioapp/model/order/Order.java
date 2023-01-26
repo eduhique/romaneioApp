@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -20,11 +21,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Getter
@@ -54,8 +54,8 @@ public class Order implements Serializable {
     @JoinColumn(name = "users_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private Set<OrderItem> orderItems;
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<OrderItem> orderItems;
 
     @CreationTimestamp
     private LocalDateTime createdDate;
@@ -64,7 +64,7 @@ public class Order implements Serializable {
     private LocalDateTime lastUpdate;
 
     @Enumerated(EnumType.STRING)
-    @NotEmpty
+    @NotNull
     private OrderStatus status;
 
     private LocalDateTime statusDate;

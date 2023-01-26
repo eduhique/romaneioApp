@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,7 +22,7 @@ public class OrderDto implements Serializable {
 
     private UserDto user;
 
-    private Set<OrderItemDto> orderItems;
+    private List<OrderItemDto> orderItems;
 
     private LocalDateTime createdDate;
 
